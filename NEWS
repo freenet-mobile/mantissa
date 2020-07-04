@@ -1,0 +1,487 @@
+2007-10-07 (version 7.2)
+
+    fixed an array update error in DummyStepInterpolator that could
+    show up while serializing the interpolator despite having set up
+    the step handler to not use continuous output.
+
+2007-09-26 (version 7.1)
+
+    added the two methods getCurrentStepStart and getCurrentStepsize
+    to interface FirstOrderIntegrator allowing ODE problems to
+    retrieve the current step start and size during integration
+    for *each* step trial (i.e. even before the step is accepted), the
+    need for this arose for stochastic fluctuations models in biology.
+
+2006-12-14 (version 7.0)
+
+    changed Vector3D class to immutable, removed ImmutableVector3D class
+
+    changed Rotation class to immutable
+
+    changed polynomials classes to immutable
+
+2006-12-03 (not released)
+
+    changed *many* classes to immutable. This change implies the
+    released version will *not* be upward compatible from the
+    previous 6.4 version.
+
+    fixed warnings detected by the FindBug checker
+
+    fix an error in computing a threshold in the Gragg-Bulirsch-Stoer
+    integrator
+
+2006-11-19 (version 6.4)
+
+    added a RESET_DERIVATIVES indicator for the eventOccurred method
+    in the SwitchingFunction interface to make sure the integrator
+    does not reuse previous derivatives when a switching function
+    triggers a derivatives discontinuity (thanks to Fabien Maussion
+    for reporting the issue)
+
+    deprecated the RESET indicator for the eventOccurred method
+    in the SwitchingFunction interface, now replaced by RESET_STATE
+
+2006-09-10 (version 6.3)
+
+    deprecated the Rotation constructor using four doubles and
+    replaced it by a constructor using four doubles and a boolean
+    to allow the use of non-normalized quaternions coordinates
+    (thanks to Guylaine Prat for reporting the issue)
+
+    fixed a missing copyright in the Gragg-Bulirsch-Stoer integrator
+
+2006-09-03 (version 6.2)
+
+    fixed an error in the insertion of intervals in the middle of
+    an IntervalsList (thanks to Peter Sýkora for identifying the
+    issue and providing a patch)
+
+    added a way to build a DerivativeException from another exception
+    acting as a cause to allow user-specific errors to be handled
+    by Mantissa during integration
+
+    added getAlpha, getDelta and a new linear constructor from 3
+    vectors to the Vecto3D class (thanks to Guylaine Prat for reporting
+    the issue)
+
+2005-12-27 (version 6.1)
+
+    fixed handling of over-determined systems (more variables than
+    equations) in the Levenberg-Marquardt least squares estimator
+
+2005-12-16 (version 6.0)
+
+    added the Levenberg-Marquardt algorithm for least squares solving
+    (this is a major feature improvement)
+ 
+    added internationalization of the error messages (english and french
+    for now)
+
+    renamed the LeastSquaresEstimator class into GaussNewtonEstimator
+    (a stub LeastSquaresEstimator class still exists but is deprecated,
+     it will be removed sometime in the future)
+
+    removed all methods and fields that have been deprecated for more
+    than two years long
+
+    reorganized the sources directory structure with separate tests
+
+    fixed all the warnings identified by the eclipse IDE
+
+2005-10-02 (version 5.10)
+
+    relaxed the specs of ContinuousOutputModel to allow extrapolating
+    outside of the integration interval. This should be used with care
+    as extrapolation accuracy will be degraded far from the integration
+    interval (thanks to Ingo Struck for identifying the issue)
+
+2005-09-21 (version 5.9)
+
+    fixed an error in the Gragg-Bulirsch-Stoer integrator: the
+    setStabilityCheck method did not work, the integrator never
+    really performed stability checks (thanks to Ingo Struck)
+
+2005-04-16 (version 5.8)
+
+    added a protection against integration over a null interval in the
+    ODE package (thanks to Guylaine Prat)
+
+2005-03-01 (version 5.7)
+
+    corrected another sign error with fixed step Runge-kutta integrators
+    when integration is backward (thanks to Bruno Revelin again)
+
+2005-02-15 (version 5.6)
+
+    corrected a sign error with switching function convergence
+    when integration is backward (thanks to Bruno Revelin)
+
+2004-10-07 (version 5.5)
+
+    added the Gill and the 3/8 fourth-order fixed step integrators
+
+    changed signature of the evaluateStep and added a getEventTime method
+    in SwitchingFunctionsHandler to completely hide the SwitchState
+    instances for the integrator
+
+    recomputed switching function triggering time after a step has been
+    truncated to end at the exact event time, using the more precise
+    result available at the end of the shorter step
+
+    added a protection to avoid triggering the same event twice, at
+    the end of a step and at the beginning of the following one
+
+    extended search domain for switching function triggering time to
+    prevent missing an event that slightly slides into next step due
+    to new accuracy and could lead to either null length steps or not
+    flagging a step as the last one for the step handler if the event
+    should stop integration
+
+    allowed setting the interpolation time outside of the current step
+    for step interpolator. This feature should be used with care since
+    the accuracy of the interpolator will probably be very poor far
+    from this step. This allowance has been added to simplify
+    implementation of search algorithms near the step endpoints
+
+    reimplemented the fixed step Runge-Kutta method from a generic
+    abstract class
+
+    added the isForward method to the StepInterpolator interface, to
+    be able to check the integration direction even is degenerated
+    cases like null steps due to cancellation at initialization, step
+    size control or switching function triggering (this has the drawback
+    that ContinuousOutputModel saved to file through serialization with
+    previous versions will not be compatible with the new version)
+
+2004-09-12 (version 5.4)
+
+    allow the final integration step to be smaller than the specified
+    minimal step value, in order to end integration properly (previously,
+    such small last steps were also accepted, but only if the step control
+    produced a sufficiently large step that was later truncated to fit
+    integration range, now they are also accepted at step control level)
+
+2004-09-11 (version 5.3)
+
+    added a method to let the user specify the initial stepsize to
+    adaptive steps ODE integrators
+
+    added a protection to prevent too small first integration steps to
+    be generated by adaptive steps ODE integrators, leading to a
+    cancellation later in the step interpolator and a first step beeing
+    considered of length 0
+
+    corrected an error in ContinuousOutputModel for backward integration
+    with a length 0 first step, leading to an InvalidArgumentException
+    beeing thrown by the setInterpolatedTime method, regardless of the
+    value of the time parameter
+
+2004-08-22 (version 5.2)
+
+    corrected an interpolator update error in the Gragg-Bulirsch-Stoer
+    integrator. Wrong intervals were provided to the step handler when
+    a step was truncated by a switching function trigger
+
+    documented the fact that backward integration is supported simply
+    by specifying a target time smaller than the initial time (the minStep
+    and maxStep parameters of adaptive stepsize integrators beeing always
+    positive, even for backward integration)
+
+    added a test case for backward integration
+
+2004-07-15 (version 5.1)
+
+    added an optimization package with two direct search methods:
+      - the Nelder-Mead simplex method
+      - the multi-directional method from Virginia Torczon
+
+2004-07-14 (not released)
+
+    in the random package, when a null integer array is used as the seed
+    for pseudo-random number generator, the effect is the same as if no
+    seed were provided (i.e. the seed is related to current time)
+
+    corrected some javadocs
+
+2004-07-11 (not released)
+
+    replaced java.util.Vector by java.util.ArrayList everywhere
+
+    corrected some javadocs
+
+2004-06-20 (not released)
+
+    updated the link to Makoto Matsumoto page about the Mersenne Twister
+    random generator
+
+2004-03-11 (version 5.0)
+
+    improved the VectorialSampleStatistics class by adding the indices
+    of minimas and maximas occurrences, renaming getCorrelationMatrix
+    into getCovarianceMatrix, and expanding javadoc
+
+    improved javadoc in the CorrelatedRandomVectorGenerator class
+
+2004-03-03 (version 4.7)
+
+    added several constructors for UniformRandomGenerator and
+    GaussianRandomGenerator using other seeds types (single int and
+    int array), since the underlying MersenneTwister generator
+    supports them
+
+    corrected a test program
+
+2004-01-11 (version 4.6)
+
+    updated copyright year, added small tests
+
+2003-12-29 (version 4.5)
+
+    added a MersenneTwister random generator
+
+    corrected an important error in the FourTapRandom random number
+    generator (the error was in my own adaptation, not in Bill Maier
+    original code)
+
+2003-12-13 (version 4.4)
+
+    added a FourTapRandom random number generator which is much better
+    than the standard java.util.Random generator for Monte-Carlo
+    simulations (this class was kindly contributed by Bill Maier)
+
+    added an Interval and an IntervalsList classes
+
+2003-07-07 (version 4.3)
+
+    added a Rotation.applyInverseTo(Rotation) method
+
+    vastly improved documentation of the Rotation class
+
+    removed remaining uses of the deprecated i, j and k Vector3D fields
+    corrected some javadoc tags
+
+2003-06-25 (version 4.2)
+
+    added an ImmutableVector3D class derived from Vector3D
+    and used it to handle the canonical vectors (plusI, minusI,
+    plusJ, minusJ, plusK and minusK). Deprecated the old
+    canonical vectors (i, j, k), which are still there and will
+    be removed at some point in the future
+
+2003-04-08 (version 4.1)
+
+    added a maximal time interval between switching functions checks
+    in the ODE integrators, to prevent missing switching functions
+    sign changes in case the step becomes too large
+
+2003-03-30 (version 4.0)
+
+    added support for multiple switching functions in all ODE
+    integrators, allowing to handle discrete events such as
+    discontinuities on the differential equations but also on the
+    state and allowing to stop the integrator (G-stop facility)
+
+2003-03-29 (not released)
+
+    added a roots package and a BrentSolver class for numerical roots
+    finding
+
+2003-02-28 (version 3.3)
+
+    replaced long by BigInteger in the RationalNumber and
+    Polynomial.Rational classes, in order to be able to compute
+    orthogonal polynoms to any degree (the previous implementation was
+    false for 35 degree Legendre polynomials)
+
+2003-02-23 (version 3.2)
+
+    added a random package to perform mono- and multivariate random
+    draws (with and without correlation) and compute some statistics
+
+2003-02-22 (not released)
+
+    corrected an error in the Matrix.toString method (the first matrix
+    element was never printed !)
+
+    replaced wrong use of InvalidParameterException by
+    IllegalArgumentException in all classes of the linalg package
+
+2003-02-17 (version 3.1)
+
+    corrected an error in the OrthogonalPolynomial class that prevent
+    it from working for recurrence relations having a non-null b2k
+    (this error did not affect Chebyshev, Hermite and Legendre
+    polynomials which all have a null b2k).
+
+    introduced a new polynomial family: the Laguerre polynomials
+
+2003-02-16 (version 3.0)
+
+    added an algebra package containing a RationalNumber class,
+    various polynomial classes (Polynomial.Rational, Polynomial.Double,
+    Chebyshev, Hermite, Legendre) and a PolynomialFraction class
+
+2003-01-17 (version 2.2)
+
+    added a reset(v) and a setToCrossProduct(v1, v2) methods in the
+    Vector3D class to avoid building new instance when existing ones
+    can be reused
+
+    allowed y0 and y to refer to the same array in the ODE integrators
+
+2003-01-15 (version 2.1)
+
+    added to ArrayMapper a constructor with an instance of
+    ArraySliceMappable to manage.
+
+2003-01-03 (version 2.0)
+
+    use Throwable.initCause to implement exception chaining rather
+    than rebuilding an exception with the message extracted from
+    another exception (this implies mantissa needs at least java 1.4
+    to run properly)
+
+    completed reimplementation of the Gragg-Bulirsch-Stoer integrator
+    and the associated step interpolator
+
+    removed the InterpolationException class in the ode package
+
+2002-12-25 (not released)
+
+    started a complete reimplementation of the
+    Gragg-Bulirsch-Stoer integrator, using the odex routine
+    by Hairer and Wanner as a model
+
+2002-12-24 (not released)
+
+    added a requiresDenseOutput method in the StepHandler
+    interface, to allow ODE integrators to avoid performing
+    extra computation when the step handler does not require
+    them
+
+    split the StepInterpolator abstract class into a
+    StepInterpolator interface and a AbstractStepInterpolator
+    abstract class, thus simplifying the distinction between
+    methods useful for end users (in step handlers) and methods
+    needed by integrators to set up the interpolator
+
+2002-12-23 (not released)
+
+    use the same scaling technique for all variable step ODE
+    integrators (thus allowing to have exactly the same
+    constructor arguments with the same meaning for all)
+
+    added a reset method in the StepHandler interface, called
+    at the beginning of integration
+
+    simplified ODE test classes (separation of problem definition
+    and step handling)
+
+2002-12-22 (not released)
+
+    removed the step handler argument in FirstOrderIntegrator.integrate
+    and SecondOrderIntegrator.integrate methods. Now all integrators
+    have a default step handler (which does nothing) and the user
+    can set his own handler before calling the integrate method.
+    This simplifies the interface for users who are not interested
+    in intermediate points and only need the final state vector.
+
+2002-12-14 (not released)
+
+    added a setCoordinates method in Vector3D
+
+2002-09-29 (version 1.7)
+
+    corrected the Bulirsch-Stoer step interpolator
+
+    added a general automatic step initialization in the abstract
+    class AdaptiveStepsizeIntegrator
+
+2002-09-25 (version 1.6)
+
+    added a preliminary version of a Bulirsch-Stoer integrator
+    in the ode package (the integrator seems good but there are
+    problems in the step interpolator)
+
+2002-09-11 (version 1.5)
+
+    corrected an error in the Rotation.applyInverseTo method
+
+    improved the Rotation tests
+
+    implemented the Externalizable interface rather than using
+    the default Serializable interface for the step interpolators
+    thus greatly reducing the size of the serialized streams
+
+    added tests for all the step interpolators serialization
+
+2002-09-10 (not released)
+
+    completed the Rotation class and added tests for it
+
+    created a RotationOrder class to benefit from strong typing
+
+2002-09-05 (version 1.4)
+
+    step interpolators (and ContinuousOutputModel) now implement the
+    Serializable interface in order to be able to save the result of
+    an integration for later retrieval
+
+    added the MappableArray and MappableScalar classes in the
+    utilities package
+
+2002-08-26 (version 1.3)
+
+    added the geometry package containing Vector3D and Rotation
+    (Rotation is not completed yet and not tested at all)
+
+2002-08-18 (version 1.2)
+
+    renamed RungeKutta2-related classes into Midpoint
+
+    renamed RungeKutta4-related classes into ClassicalRungeKutta
+
+2002-08-05 (version 1.1)
+
+    added the famous Dormand-Prince 8(5,3) integrator in the
+    org.spaceroots.mantissa.ode package
+
+2002-08-01 (not released)
+
+    added a support for FSAL (First Same As LAst) integrators in
+    the org.spaceroots.mantissa.ode.RungeKuttaFehlbergIntegrator
+    abstract class
+
+2002-07-28 (version 1.0)
+
+    added the org.spaceroots.mantissa.ode.ContinuousOutputModel class
+    to store all step interpolators created during the integration
+    in a single model in a transparent way, thus allowing to
+    navigate through the numerically integrated model as if it were
+    an analytical model
+
+2002-07-25
+
+    added the org.spaceroots.mantissa.ode.FixedStepHandler interface
+    and the org.spaceroots.mantissa.ode.StepNormalizer class for
+    people who need fixed step output (the output step is not related
+    to the integration step, it can be longer, shorter, whatever).
+
+2002-07-24
+
+    added the org.spaceroots.mantissa.utilities.ArraySliceMappable
+    interface and the org.spaceroots.mantissa.utilities.ArrayMapper
+    class to help mapping data between domain objects and the
+    mathematical algorithms implemented in mantissa (for example ODE
+    integrators).
+
+2002-07-02
+
+    added generic classes to implement Runge-Kutta-Felhberg ODE
+    integrators with stepsize control and dense output.
+
+    added the Dormand-Prince 5(4) order integrator with Shampine
+    dense output
+
+    added the Higham-Hall 5(4) order integrator

@@ -1,0 +1,19 @@
+integrate mantissa with Apache commons-math
+
+package org.spaceroots.mantissa.quadrature :
+
+  replace the samplers/iterators by a step handler
+  similar to the ones used for ODE.
+
+package org.spaceroots.mantissa.ode :
+
+  add a variational equations integration feature
+
+  replace Shampine dense output by Owren/Zennaro
+  formula which requires two additional function
+  evaluations but is of 5th order (same order as the
+  integrator itself)
+
+package org.spaceroots.mantissa.tabulation
+
+  create the package

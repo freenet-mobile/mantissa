@@ -1,0 +1,38 @@
+MANTISSA
+(Mathematical Algorithms for Numerical Tasks In Space System Applications)
+
+This product is a low level library of mathematical algorithms that
+can be useful in space systems developments. It includes for example a
+small set of linear algebra classes that should be sufficient to
+implements least squares methods, linear equations solving, some ODE
+integrators, some polynomials and algebra-related classes and
+direct-search optimization methods.
+
+In order to build the mantissa package, you need the following tools  :
+
+ - ant
+   http://ant.apache.org
+
+ - junit (only if you want to rerun the tests)
+   http://www.junit.org
+
+Building the package is done by the following command :
+
+     ant
+
+This should create a mantissa.jar file and a mantidoc.zip file
+
+To install mantissa, you should put the mantissa.jar file somewhere in
+your CLASSPATH. If you want to install the documentation, unpack the
+mantidoc.zip file in a place where your Web server can find it and
+put a link to mantidoc/index.html in your documentation tree.
+
+
+If you want to run the tests you should do :
+
+     ant test
+
+If you want to run only a subset of the tests, you should set the
+test.class property to the root of the subset like this :
+
+     ant -Dtest.class=org.spaceroots.mantissa.ode.AllTests test
