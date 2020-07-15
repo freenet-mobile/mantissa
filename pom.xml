@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.desyncr</groupId>
     <artifactId>mantissa</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2</version>
     <packaging>jar</packaging>
     <url>https://github.com/desyncr/mantissa</url>
     <build></build>
@@ -13,14 +13,5 @@
             <version>4.12</version>
         </dependency>
     </dependencies>
-
-    <distributionManagement>
-       <repository>
-         <id>github</id>
-         <name>GH package repository</name>
-         <url>https://maven.pkg.github.com/desyncr/mantissa</url>
-       </repository>
-    </distributionManagement>
-
 </project>
 
