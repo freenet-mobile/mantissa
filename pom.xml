@@ -1,10 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.github.desyncr</groupId>
+    <groupId>com.github.freenet-mobile</groupId>
     <artifactId>mantissa</artifactId>
-    <version>0.0.2</version>
+    <version>0.0.3</version>
     <packaging>jar</packaging>
-    <url>https://github.com/desyncr/mantissa</url>
+    <url>https://github.com/freenet-mobile/mantissa</url>
     <build></build>
     <dependencies>
         <dependency>
